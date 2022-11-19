@@ -75,8 +75,6 @@ def get_data(start_year, end_year, time_sleep = 0.5):
         except:
             print(season, r.reason, r)
         result = pd.DataFrame(data['rowSet'], columns = data['headers'])
-        col_select = ['PLAYER_ID', 'PLAYER_NAME', 'TEAM_ID', 'TEAM_ABBREVIATION', 'AGE', 'PLAYER_HEIGHT_INCHES', 'PLAYER_WEIGHT', 'COLLEGE', 'COUNTRY', 'DRAFT_YEAR', 'DRAFT_ROUND', 'DRAFT_NUMBER']
-        result = result[col_select]
         result = result.fillna(np.nan).replace('', np.nan)
         # convert draft year, draft round and draft number to a relative draft position in each year's draft
         result[['DRAFT_YEAR', 'DRAFT_ROUND', 'DRAFT_NUMBER']] = result[['DRAFT_YEAR', 'DRAFT_ROUND', 'DRAFT_NUMBER']].replace("Undrafted", np.nan).astype(float)
