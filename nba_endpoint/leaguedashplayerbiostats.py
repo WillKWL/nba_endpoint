@@ -99,5 +99,6 @@ if __name__ == '__main__':
     file_path = os.path.dirname(os.path.abspath(__file__))
     os.chdir(file_path)
     os.chdir('../data')
-    output.to_pickle('nba_playerbiostats.pkl')
+    output.to_pickle('nba_playerbiostats.pkl', protocol = 4)
     print(f'{start_year} - {end_year} data saved to nba_playerbiostats.pkl')
+    
