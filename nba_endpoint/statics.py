@@ -6,4 +6,8 @@ def retrieve_leaguedashplayerbiostats():
     seasons = output.SEASON.unique()
     print(f"Data retrieved from {min(seasons)} to {max(seasons)}")
     return output
-    
+
+
+if __name__ == '__main__':
+    data = retrieve_leaguedashplayerbiostats()
+    print(data.head())
