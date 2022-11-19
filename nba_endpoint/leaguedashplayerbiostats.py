@@ -6,6 +6,16 @@ import os
 import pickle
 
 def get_data(start_year, end_year, time_sleep = 0.5):
+    """get player bio data from nba.stats
+
+    Args:
+        start_year (int): year to start collecting data, e.g. 1996 for 1996-97 season
+        end_year (int): year to end collecting data, e.g. 2023 for 2022-23 season
+        time_sleep (float, optional): Defaults to sleep for 0.5s between each request.
+
+    Returns:
+        df: pandas dataframe of data
+    """
     # hard to get numbers of years in nba (cannot determine thru draft year since some players are undrafted, some left the league then returned to NBA)
     # start_year = 1996 
     # end_year = 2023
@@ -101,8 +111,5 @@ if __name__ == '__main__':
     os.chdir(file_path)
     os.chdir('../data')
     output.to_pickle('nba_playerbiostats.pkl')
-    # data = pd.read_pickle('nba_playerbiostats.pkl')
-    # pickle.HIGHEST_PROTOCOL = 4
-    # data.to_hdf('nba_playerbiostats.hdf', key = 'df', mode = 'w')
     print(f'{start_year} - {end_year} data saved to nba_playerbiostats.pkl')
     
