@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import time
 import os
+import pickle
 
 def get_data(start_year, end_year, time_sleep = 0.5):
     # hard to get numbers of years in nba (cannot determine thru draft year since some players are undrafted, some left the league then returned to NBA)
@@ -99,6 +100,9 @@ if __name__ == '__main__':
     file_path = os.path.dirname(os.path.abspath(__file__))
     os.chdir(file_path)
     os.chdir('../data')
-    output.to_pickle('nba_playerbiostats.pkl', protocol = 4)
+    output.to_pickle('nba_playerbiostats.pkl')
+    # data = pd.read_pickle('nba_playerbiostats.pkl')
+    # pickle.HIGHEST_PROTOCOL = 4
+    # data.to_hdf('nba_playerbiostats.hdf', key = 'df', mode = 'w')
     print(f'{start_year} - {end_year} data saved to nba_playerbiostats.pkl')
     
