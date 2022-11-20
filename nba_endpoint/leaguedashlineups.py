@@ -95,15 +95,13 @@ def get_data(start_year, end_year, team_list = None):
     
 if __name__ == '__main__':
     # grab latest data
-    start_year = input('Start year? (YYYY: int)')
-    end_year = input('End year? (YYYY: int)')
-    if start_year == '':
-        start_year = 1996
+    start_year = 2007
+    end_year = input('2007 until which year? (YYYY: int)')
     if end_year == '':
         end_year = time.strftime("%Y")
     
     data, fail_list = get_data(int(start_year), int(end_year), 
-                               team_list = ['1610612742', '1610612765', '1610612763'])
+                               team_list = ['1610612737', '1610612738'])
     file_path = os.path.dirname(os.path.abspath(__file__))
     os.chdir(file_path)
     os.chdir('../data')
