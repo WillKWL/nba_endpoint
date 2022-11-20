@@ -82,8 +82,9 @@ def get_data(start_year, end_year, time_sleep = 0.5):
         # DRAFT_POSITION = 1 for undrafted players (last place in a year's draft)
         result['DRAFT_POSITION'] = result['DRAFT_POSITION'].fillna(1)
         # fix datatypes
-        result['PLAYER_ID'] = result.PLAYER_ID.astype(str)
-        result['TEAM_ID'] = result.TEAM_ID.astype(str)
+        result.dropna(subset = ['PLAYER_ID', 'TEAM_ID'], inplace = True)
+        result['PLAYER_ID'] = result.PLAYER_ID.astype(int).astype(str)
+        result['TEAM_ID'] = result.TEAM_ID.astype(int).astype(str)
         try:
             result['PLAYER_WEIGHT'] = result.PLAYER_WEIGHT.astype(float)
         except ValueError as v:
