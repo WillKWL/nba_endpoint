@@ -54,20 +54,20 @@ def get_data(start_year, end_year, team_list = None):
                         "VsDivision": ""
                     }
 
-                    
-                    r = s.get('https://stats.nba.com/stats/leaguedashlineups',
-                                    params=payload,
-                                    headers={
-                                        "Referer": "https://www.nba.com/",
-                                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"
-                                        },
-                                    timeout=10)
-                    
                     try:
+                        r = s.get('https://stats.nba.com/stats/leaguedashlineups',
+                                        params=payload,
+                                        headers={
+                                            "Referer": "https://www.nba.com/",
+                                            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"
+                                            },
+                                        timeout=10)
+                    
+                    
                         # print('\n', season, home_road, team, opponent, r)
                         data = r.json()['resultSets'][0]
-                    except:
-                        print(season, home_road, team, opponent, r.reason, r)
+                    except TimeoutError as t:
+                        print(season, home_road, team, opponent, t)
                         fail_list.append([season, home_road, team, opponent])
                         result = pd.DataFrame()
                     else:
@@ -87,7 +87,7 @@ def get_data(start_year, end_year, team_list = None):
                             result = pd.DataFrame()
                     
                     output = pd.concat([output, result], axis = 0)
-                    time.sleep(0.5)
+                    time.sleep(1)
                     progress_bar.update(1)
     
     s.close()
@@ -101,7 +101,8 @@ if __name__ == '__main__':
         end_year = time.strftime("%Y")
     
     data, fail_list = get_data(int(start_year), int(end_year), 
-                               team_list = ['1610612737', '1610612738'])
+                            #    team_list = ['1610612737', '1610612738']
+                               )
     file_path = os.path.dirname(os.path.abspath(__file__))
     os.chdir(file_path)
     os.chdir('../data')

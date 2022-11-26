@@ -5,8 +5,8 @@ import time
 import os
 import pickle
 
-def get_data(start_year, end_year, time_sleep = 0.5):
-    """get player bio data from nba.stats
+def request_data(start_year, end_year, time_sleep = 0.5):
+    """request player bio data from nba.stats
 
     Args:
         start_year (int): year to start collecting data, e.g. 1996 for 1996-97 season
@@ -98,18 +98,38 @@ def get_data(start_year, end_year, time_sleep = 0.5):
     s.close()
     return output
     
+def retrieve_data(columns = None):    
+    """retrieve latest player bio data to avoid multiple requests
+
+    Returns:
+        df: pandas dataframe of data
+    """
+    path = 'data/nba_playerbiostats.pkl'
+    output = pd.read_pickle(f"https://github.com/WillKWL/nba_endpoint/blob/master/{path}?raw=true")
+    print("Last committed: ", requests.get(f"https://api.github.com/repos/WillKWL/nba_endpoint/commits?path={path}").json()[0]['commit']['author']['date'])
+    if columns is not None:
+        output = output[columns]
+    seasons = output.SEASON.unique()
+    print(f"Data retrieved from {min(seasons)} to {max(seasons)}")
+    return output
 
 if __name__ == '__main__':
-    # grab latest data
-    start_year = input('Start year? (YYYY: int)')
-    end_year = input('End year? (YYYY: int)')
-    if start_year == '':
-        start_year = 1996
-    if end_year == '':
-        end_year = time.strftime("%Y")
-    output = get_data(int(start_year), int(end_year))
-    file_path = os.path.dirname(os.path.abspath(__file__))
-    os.chdir(file_path)
-    os.chdir('../data')
-    output.to_pickle('nba_playerbiostats.pkl')
-    print(f'{start_year} - {end_year} data saved to nba_playerbiostats.pkl')
+    
+    choice = input("Retrieve latest data instead of sending requests? (y/n): ")
+    if choice == 'y':
+        data = retrieve_data()
+        print(data.head())
+    else:
+        # grab latest data
+        start_year = input('Start year? (YYYY: int)')
+        end_year = input('End year? (YYYY: int)')
+        if start_year == '':
+            start_year = 1996
+        if end_year == '':
+            end_year = time.strftime("%Y")    
+        output = request_data(int(start_year), int(end_year))
+        file_path = os.path.dirname(os.path.abspath(__file__))
+        os.chdir(file_path)
+        os.chdir('../data')
+        output.to_pickle('nba_playerbiostats.pkl')
+        print(f'{start_year} - {end_year} data saved to nba_playerbiostats.pkl')
